@@ -1,132 +1,149 @@
 # Deep Reinforcement Learning Trading System
 
-This is a sophisticated trading system that combines three major components:
+**Course:** AAI612: Deep Learning & its Applications  
+**Institution:** Lebanese American University  
+**Author:** Ali Askar  
+**Project Title:** Deep Reinforcement Learning Trading System  
+**Submission Date:** 16/3/2025  
+**GitHub Repository:** [DLproject](https://github.com/alihaskar/DLproject.git)
 
-## 1. Market Regime Detection (`src/regimes/`)
-- Implements multiple methods to detect market states:
+## Abstract
+This project presents the development of a sophisticated Deep Reinforcement Learning (DRL) Trading System. The system integrates three primary components: Market Regime Detection, Metalabeling, and Reinforcement Learning. The objective is to leverage traditional and modern AI methodologies to enhance the accuracy and efficiency of trading decisions. The project employs advanced machine learning techniques, including transformer-based models, hidden Markov models, and various reinforcement learning algorithms to develop an adaptive and robust trading framework.
+
+## 1. Introduction
+In quantitative finance, adapting to dynamic market conditions is essential for strategy robustness. This project integrates market regime detection, metalabeling using the triple-barrier method, and reinforcement learning algorithms to construct an intelligent trading system capable of adjusting to evolving market states.
+
+## 2. System Architecture
+
+### 2.1 Market Regime Detection (`src/regimes/`)
+- **Objective:** Identify and classify current market states to tailor trading strategies.
+- **Methodologies:**
   - Rule-based detection
   - Hidden Markov Models (using `hmmlearn`)
-  - Transformer-based detection
-- Files:
-  - `market_regime_detector.py`: Core implementation (458 lines)
-  - `compare_regime_performance.py`: Performance comparison (259 lines)
-  - `regime_performance_analysis.py`: Analysis tools (221 lines)
-  - `run_detector.py`: CLI interface
+  - Transformer-based detection for dynamic pattern recognition
+- **Files:**
+  - `market_regime_detector.py`: Core detection implementation (458 lines)
+  - `compare_regime_performance.py`: Performance comparison across detection methods (259 lines)
+  - `regime_performance_analysis.py`: Analysis tools for regime effectiveness (221 lines)
+  - `run_detector.py`: CLI interface for ease of use
+- **Regime Categories:**
+  - Uptrend
+  - Downtrend
+  - Mean Reversion
+  - Volatile
+  - Neutral
 
-The regime detector classifies market states into:
-- Uptrend
-- Downtrend
-- Mean reversion
-- Volatile
-- Neutral
-
-## 2. Metalabeling System (`src/metalabel/`)
-- Uses the Triple-Barrier Method for labeling
-- Main implementation in `triple_barrier.py` (563 lines)
-- Features:
+### 2.2 Metalabeling System (`src/metalabel/`)
+- **Objective:** Enhance prediction accuracy through signal refinement.
+- **Methodologies:**
+  - Triple-Barrier Method for dynamic thresholding
+  - Machine learning models for signal filtering
+- **Files:**
+  - `triple_barrier.py`: Main implementation (563 lines)
+  - `run_metalabeling.py`: CLI interface for streamlined operations
+- **Features:**
   - Dynamic threshold calculation
-  - Machine learning-based signal filtering
   - Performance analysis tools
-- Includes CLI interface in `run_metalabeling.py`
 
-## 3. Reinforcement Learning (`src/RL/`)
-Implements three major RL algorithms:
-1. DQN (Deep Q-Network)
-2. PPO (Proximal Policy Optimization)
-3. SAC (Soft Actor-Critic)
+### 2.3 Reinforcement Learning (`src/RL/`)
+- **Objective:** Optimize trading decisions through adaptive learning.
+- **Implemented Algorithms:**
+  - Deep Q-Network (DQN)
+  - Proximal Policy Optimization (PPO)
+  - Soft Actor-Critic (SAC)
+- **Structure:** Each algorithm is encapsulated within its own subdirectory for modularity and clarity.
 
-Each algorithm has its own subdirectory with implementation.
+### 2.4 Integration Layer
+- **Main Class:** `DRL` (located in `src/drl.py`)
+- **Features:**
+  - Lazy loading of system components
+  - Unified interface for component interaction and orchestration
 
-## Integration Layer
-- Main class `DRL` in `src/drl.py` integrates all components
-- Lazy loading of components through properties
-- Unified interface for all functionalities
+## 3. Installation Guide
 
-## Installation
-
-1. Make sure you have Python 3.8+ installed
-2. Install Poetry (dependency management):
+1. **Pre-requisites:** Python 3.8+
+2. **Install Poetry for Dependency Management:**
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
-
-3. Clone the repository and install dependencies:
+3. **Clone the Repository and Install Dependencies:**
 ```bash
-git clone <repository-url>
+git clone https://github.com/alihaskar/DLproject.git
 cd DLProject
 poetry install
 ```
 
-## Dependencies (from pyproject.toml)
-Core libraries:
+## 4. Core Dependencies
 - Python 3.12
 - PyTorch 2.1.2
 - pandas 2.2.0
 - scikit-learn 1.4.0
 - hmmlearn 0.3.0
-- gym 0.26.0 (for RL environments)
-- ta 0.11.0 (technical analysis)
+- gym 0.26.0
+- ta 0.11.0
 
-## Project Structure
+## 5. Project Directory Structure
 ```
 .
 ├── data/           # Trading data (gitignored)
 ├── models/         # Saved models (gitignored)
 ├── reports/        # Generated reports (gitignored)
-├── src/           
-│   ├── regimes/    # Market regime detection
-│   ├── metalabel/  # Metalabeling implementation
+├── src/            # Core implementation
+│   ├── regimes/    # Market regime detection module
+│   ├── metalabel/  # Metalabeling system
 │   └── RL/         # Reinforcement learning algorithms
 └── tests/          # Unit tests
 ```
 
-## Running the Code
+## 6. Running the System
 
-The system can be run in different modes using the `run_me.py` script:
-
-### All Components
-To run all components sequentially:
+### 6.1 Running All Components Sequentially
 ```bash
 poetry run python run_me.py --mode all
 ```
 
-### Individual Components
-
-1. Market Regime Detection:
+### 6.2 Running Individual Components
+- **Market Regime Detection:**
 ```bash
 poetry run python run_me.py --mode regimes
 ```
-
-2. Metalabeling:
+- **Metalabeling System:**
 ```bash
 poetry run python run_me.py --mode metalabel
 ```
-
-3. Deep Q-Network (DQN):
+- **DQN Algorithm:**
 ```bash
 poetry run python run_me.py --mode dqn
 ```
-
-4. Proximal Policy Optimization (PPO):
+- **PPO Algorithm:**
 ```bash
 poetry run python run_me.py --mode ppo
 ```
-
-5. Soft Actor-Critic (SAC):
+- **SAC Algorithm:**
 ```bash
 poetry run python run_me.py --mode sac
 ```
 
-### Custom Data Path
-You can specify a custom data path:
+### 6.3 Custom Data Path
 ```bash
 poetry run python run_me.py --mode all --data_path data/custom_data.csv
 ```
 
-## Output Structure
-- Regime detection results → `reports/regimes/`
-- Metalabeling results → `reports/metalabel/`
-- Trained models → `models/`
-- Performance reports → `reports/`
+## 7. Output Structure
+- **Market Regime Results:** `reports/regimes/`
+- **Metalabeling Outputs:** `reports/metalabel/`
+- **Saved Models:** `models/`
+- **Performance Reports:** `reports/`
 
-The project is a comprehensive trading system that combines traditional market analysis (regime detection), machine learning (metalabeling), and deep reinforcement learning for optimal trading decisions. The codebase is well-structured with clear separation of concerns and modular design.
+## 8. Conclusion
+This project successfully integrates market regime detection, metalabeling, and reinforcement learning to create an adaptive trading system. The design emphasizes modularity, performance, and robustness, offering a scalable framework for advanced quantitative trading applications.
+
+## 9. Future Work
+- Incorporating online learning for real-time adaptation.
+- Enhancing regime detection using unsupervised deep learning techniques.
+- Optimization of RL algorithms for faster convergence.
+
+## References
+- López de Prado, M. (2018). *Advances in Financial Machine Learning.* Wiley.
+- Sutton, R. S., & Barto, A. G. (2018). *Reinforcement Learning: An Introduction.* MIT Press.
+- Official documentation of PyTorch, scikit-learn, and hmmlearn.
