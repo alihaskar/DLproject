@@ -1,82 +1,132 @@
 # Deep Reinforcement Learning Trading System
 
-A comprehensive Python trading system that combines:
-- Market regime detection (trend, mean reversion, volatile)
-- Strategy metalabeling
-- Deep Reinforcement Learning (DQN, PPO, SAC)
+This is a sophisticated trading system that combines three major components:
+
+## 1. Market Regime Detection (`src/regimes/`)
+- Implements multiple methods to detect market states:
+  - Rule-based detection
+  - Hidden Markov Models (using `hmmlearn`)
+  - Transformer-based detection
+- Files:
+  - `market_regime_detector.py`: Core implementation (458 lines)
+  - `compare_regime_performance.py`: Performance comparison (259 lines)
+  - `regime_performance_analysis.py`: Analysis tools (221 lines)
+  - `run_detector.py`: CLI interface
+
+The regime detector classifies market states into:
+- Uptrend
+- Downtrend
+- Mean reversion
+- Volatile
+- Neutral
+
+## 2. Metalabeling System (`src/metalabel/`)
+- Uses the Triple-Barrier Method for labeling
+- Main implementation in `triple_barrier.py` (563 lines)
+- Features:
+  - Dynamic threshold calculation
+  - Machine learning-based signal filtering
+  - Performance analysis tools
+- Includes CLI interface in `run_metalabeling.py`
+
+## 3. Reinforcement Learning (`src/RL/`)
+Implements three major RL algorithms:
+1. DQN (Deep Q-Network)
+2. PPO (Proximal Policy Optimization)
+3. SAC (Soft Actor-Critic)
+
+Each algorithm has its own subdirectory with implementation.
+
+## Integration Layer
+- Main class `DRL` in `src/drl.py` integrates all components
+- Lazy loading of components through properties
+- Unified interface for all functionalities
 
 ## Installation
 
-This project uses Poetry for dependency management. To install dependencies:
-
+1. Make sure you have Python 3.8+ installed
+2. Install Poetry (dependency management):
 ```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+3. Clone the repository and install dependencies:
+```bash
+git clone <repository-url>
+cd DLProject
 poetry install
 ```
 
-## Usage
+## Dependencies (from pyproject.toml)
+Core libraries:
+- Python 3.12
+- PyTorch 2.1.2
+- pandas 2.2.0
+- scikit-learn 1.4.0
+- hmmlearn 0.3.0
+- gym 0.26.0 (for RL environments)
+- ta 0.11.0 (technical analysis)
 
-### From Command Line
+## Project Structure
+```
+.
+├── data/           # Trading data (gitignored)
+├── models/         # Saved models (gitignored)
+├── reports/        # Generated reports (gitignored)
+├── src/           
+│   ├── regimes/    # Market regime detection
+│   ├── metalabel/  # Metalabeling implementation
+│   └── RL/         # Reinforcement learning algorithms
+└── tests/          # Unit tests
+```
 
-Run the entire system or specific components:
+## Running the Code
 
+The system can be run in different modes using the `run_me.py` script:
+
+### All Components
+To run all components sequentially:
 ```bash
-# Run everything (regimes, metalabeling, and all RL algorithms)
-poetry run python run_me.py --data_path data/cmma.csv
-
-# Run only regime detection
-poetry run python run_me.py --data_path data/cmma.csv --mode regimes
-
-# Run only metalabeling
-poetry run python run_me.py --data_path data/cmma.csv --mode metalabel
-
-# Run specific RL algorithm (dqn, ppo, or sac)
-poetry run python run_me.py --data_path data/cmma.csv --mode dqn
+poetry run python run_me.py --mode all
 ```
 
-### From Python
+### Individual Components
 
-```python
-from src.drl import DRL
-
-# Initialize the system
-drl = DRL(data_path='data/cmma.csv')
-
-# Get market regimes
-regimes_df = drl.regimes()
-
-# Get metalabels
-metalabel_df = drl.metalabel()
-
-# Run RL algorithms
-drl.rl.dqn()  # Deep Q-Network
-drl.rl.ppo()  # Proximal Policy Optimization
-drl.rl.sac()  # Soft Actor-Critic
+1. Market Regime Detection:
+```bash
+poetry run python run_me.py --mode regimes
 ```
 
-## Input Format
+2. Metalabeling:
+```bash
+poetry run python run_me.py --mode metalabel
+```
 
-The CSV file should contain:
-- DateTime: timestamp
-- Open/Close/High/Low price columns
-- position: trading position 
-- stg: strategy returns
+3. Deep Q-Network (DQN):
+```bash
+poetry run python run_me.py --mode dqn
+```
 
-## Output
+4. Proximal Policy Optimization (PPO):
+```bash
+poetry run python run_me.py --mode ppo
+```
 
-### Regimes Detection
-- feature_regime: Rule-based detection
-- hmm_regime: Hidden Markov Model detection
-- transformer_regime: Transformer-based detection
+5. Soft Actor-Critic (SAC):
+```bash
+poetry run python run_me.py --mode sac
+```
 
-Regime types:
-- uptrend
-- downtrend
-- mean_reversion
-- volatile
-- neutral
+### Custom Data Path
+You can specify a custom data path:
+```bash
+poetry run python run_me.py --mode all --data_path data/custom_data.csv
+```
 
-### Metalabeling
-DataFrame with strategy signals enhanced with ML predictions
+## Output Structure
+- Regime detection results → `reports/regimes/`
+- Metalabeling results → `reports/metalabel/`
+- Trained models → `models/`
+- Performance reports → `reports/`
 
-### RL Models
-Trained models and performance metrics for each algorithm (DQN, PPO, SAC)
+The project is a comprehensive trading system that combines traditional market analysis (regime detection), machine learning (metalabeling), and deep reinforcement learning for optimal trading decisions. The codebase is well-structured with clear separation of concerns and modular design.
