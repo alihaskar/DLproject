@@ -6,6 +6,10 @@ data/*
 models/
 models/*
 
+# Reports folder
+reports/
+reports/*
+
 # Python
 __pycache__/
 *.py[cod]
